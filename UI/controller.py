@@ -470,8 +470,9 @@ class Controller:
 
             exp.controls.append(ft.Row(controls=[
                     ft.Text(f"Tipologie di cucina:",weight="bold"),
-                    ft.Text(r.Cuisine_Style.removeprefix("[").removesuffix("]").replace("'", ""))
-                ]
+                    ft.Text(r.Cuisine_Style.removeprefix("[").removesuffix("]").replace("'", ""),width=500)
+                ],
+                vertical_alignment=ft.CrossAxisAlignment.START
             ))
             exp.controls.append(ft.Row(controls=[ft.Text(f"Rating: ",weight="bold"),ft.Text(r.Rating)]))
             a.append(exp)

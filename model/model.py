@@ -241,7 +241,11 @@ class Model:
 
     def ricorsione(self, parziale, ultimo,giorni):
         # print("*")
+        if ultimo.Name=="Out of China":
+            pass
+
         ammissibili = self.getAmmissibili(parziale,ultimo,giorni)
+
 
         if self.isTerminale(parziale,ammissibili):
             # print(parziale)
@@ -267,7 +271,7 @@ class Model:
             vic= list(self.grafo.neighbors(ultimo))
             for a in vic:
                 if a not in parziale:
-                    if ultimo.Ranking < a.Ranking: #************attenzione**********
+                    if ultimo.Rating >a.Rating:
                         amm.append(a)
             return amm
         pass

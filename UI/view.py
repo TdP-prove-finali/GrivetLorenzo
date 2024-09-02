@@ -52,7 +52,7 @@ class View(ft.UserControl):
 
         #titolo
         pad=ft.Container(height=4)
-        rowTitolo = ft.Row(controls=[ft.Text("Ristoranti", color="blue", size=24,weight="bold")])
+        rowTitolo = ft.Row(controls=[ft.Text("Ricerca Ristoranti", color="blue", size=24,weight="bold")])
 
         ###########PARTE 1
 
@@ -112,7 +112,7 @@ class View(ft.UserControl):
         pad=ft.Container(height=4)
         titolo_R = ft.Text("Itinerario", color="blue",weight="bold", size=24)
 
-        self.txtCitta_R = ft.TextField(read_only=True)
+        self.txtCitta_R = ft.TextField(read_only=True,label="Città")
         self.ddPrezzo_R = ft.Dropdown(label="Prezzo")
         row1_R = ft.Row(controls=[ft.Container(self.txtCitta_R),ft.Container(self.ddPrezzo_R)])
 

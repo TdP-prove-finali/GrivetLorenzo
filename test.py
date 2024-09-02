@@ -28,10 +28,13 @@ def testGrafoRic():
     allprezzi=mod.getAllPrezzi()
     mod.listaUtente=[]
 
-
+    file=open("tempiRicorsione.txt","a")
+    file.write("\n\nNUOVO TEST********************************\n")
 
     for c in allcitta:
         print(f"\n****{c}")
+        file.write(c+":\n")
+
         for p in allprezzi:
             print(f"- {p}")
 
@@ -52,11 +55,16 @@ def testGrafoRic():
                     s+=f" {a}"
 
             print("Cucine: "+s)
-            mod.calcola(c,p,7,False,False)
+            t1=time.time()
+            a,b=mod.calcola(c,p,5,False,False,False)
+            t2=time.time()
 
+            file.write(f"{t2-t1} - {len(b)}\n")
+    file.close()
     print("finito")
 
 def testClassi():
+    #test per suddivisione classi
     citta=DAO.getAllCittaDAO()
 
     for c in citta:
@@ -75,6 +83,8 @@ def testClassi():
 
 
 def testMigliori(i):
+    #tempo per trovare i 10 migliori sql-python
+
     file=open("tempi.txt","w")
     file2=open("tempiPython.txt","w")
     citta=DAO.getAllCittaDAO()
@@ -100,5 +110,6 @@ def testMigliori(i):
             file2.write(f"{i} {t4-t3}\n")
             print(i)
             i+=1
-testMigliori(1)
-print("stop")
+
+for i in range(0,3):
+    testGrafoRic()

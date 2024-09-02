@@ -19,11 +19,12 @@ class DAO:
                         from (
                         select *
                         from ristoranti.ta_restaurants_curated trc
-                        where Price_Range != %s
+                        where (Price_Range = '$' or Price_Range = '$$ - $$$' or Price_Range='$$$$')
                         and City = %s
                         and not isnull(trc.Number_of_Reviews)
                         and not (Cuisine_Style like "%Vegan Options%" or Cuisine_Style like "%Vegetarian Friendly%" or Cuisine_Style like "%Gluten Free Options%")
                         ) t1"""
+            cursor.execute(query, (citta,))
         else:
             query = """select t1.*
                         from (
@@ -43,7 +44,7 @@ class DAO:
                         where t1.City = t2.City
                         and t1.Rating*t1.Number_of_Reviews > t2.media"""
 
-        cursor.execute(query, (prezzo, citta,))
+            cursor.execute(query, (prezzo, citta,))
 
         for a in cursor:
             res.append(Ristorante(**a))
@@ -109,7 +110,7 @@ class DAO:
                         from (
                         select *
                         from ristoranti.ta_restaurants_curated trc
-                        where Price_Range != %s
+                        where (Price_Range = '$' or Price_Range = '$$ - $$$' or Price_Range='$$$$')
                         and City = %s
                         and not isnull(trc.Number_of_Reviews)
                         ) t1,
@@ -121,6 +122,8 @@ class DAO:
                         ) t2
                         where t1.City = t2.City
                         and t1.Rating*t1.Number_of_Reviews > t2.media"""
+            cursor.execute(query,(citta,))
+
         else:
             query = """select t1.*
                         from (
@@ -139,7 +142,7 @@ class DAO:
                         where t1.City = t2.City
                         and t1.Rating*t1.Number_of_Reviews > t2.media"""
 
-        cursor.execute(query,(prezzo,citta,))
+            cursor.execute(query,(prezzo,citta,))
 
         for a in cursor:
             res.append(Ristorante(**a))
@@ -201,15 +204,17 @@ class DAO:
                         and t.Price_Range = %s
                         and t.Rating >0
                         and not isnull(t.Number_of_Reviews)"""
+            cursor.execute(query, (citta,prezzo))
+
         else:
             query="""select min(t.Rating),max(t.Rating)
                         from ta_restaurants_curated t
                         where t.City =%s
-                        and t.Price_Range != %s
+                        and (Price_Range = '$' or Price_Range = '$$ - $$$' or Price_Range='$$$$')
                         and t.Rating >0
                         and not isnull(t.Number_of_Reviews)"""
 
-        cursor.execute(query, (citta,prezzo))
+            cursor.execute(query, (citta,))
 
         for a in cursor:
             res.append(a)
@@ -225,16 +230,17 @@ class DAO:
         res = []
 
         if prezzo is None or prezzo=="Qualsiasi":
-            prezzo=""
             query= """select Cuisine_Style 
                     from ta_restaurants_curated t
                     where City =%s
-                    and Price_Range != %s
+                    and (Price_Range = '$' or Price_Range = '$$ - $$$' or Price_Range='$$$$')
                     and Rating >=%s
                     and Rating <=%s
                     and not isnull(t.Number_of_Reviews)
                     and not (Cuisine_Style like "%Vegan Options%" or Cuisine_Style like "%Vegetarian Friendly%" or Cuisine_Style like "%Gluten Free Options%" or Cuisine_Style like "%Halal%")
                     """
+            cursor.execute(query, (citta, min, max))
+
         else:
             query = """select Cuisine_Style 
                     from ta_restaurants_curated t
@@ -243,10 +249,10 @@ class DAO:
                     and Rating >=%s
                     and Rating <=%s
                     and not isnull(t.Number_of_Reviews)
-                    and not (Cuisine_Style like "%Vegan Options%" or Cuisine_Style like "%Vegetarian Friendly%" or Cuisine_Style like "%Gluten Free Options%")
+                    and not (Cuisine_Style like "%Vegan Options%" or Cuisine_Style like "%Vegetarian Friendly%" or Cuisine_Style like "%Gluten Free Options%" or Cuisine_Style like "%Halal%")
                     """
 
-        cursor.execute(query, (citta,prezzo,min,max))
+            cursor.execute(query, (citta,prezzo,min,max))
 
         for a in cursor:
             res.append(a[0])
@@ -266,11 +272,12 @@ class DAO:
             query = """select * 
                         from ta_restaurants_curated t
                         where City =%s
-                        and Price_Range != %s
+                        and (Price_Range = '$' or Price_Range = '$$ - $$$' or Price_Range='$$$$')
                         and Rating >=%s
                         and Rating <=%s
                         and not isnull(t.Number_of_Reviews)
                         """
+            cursor.execute(query, (citta, min, max))
         else:
             query = """select * 
                         from ta_restaurants_curated t
@@ -281,7 +288,7 @@ class DAO:
                         and not isnull(t.Number_of_Reviews)
                         """
 
-        cursor.execute(query, (citta, prezzo, min, max))
+            cursor.execute(query, (citta, prezzo, min, max))
 
         for a in cursor:
             res.append(a[0])
@@ -300,14 +307,14 @@ class DAO:
             query="""select *
                     from ta_restaurants_curated t
                     where t.City =%s
-                    and t.Price_Range != %s
+                    and (Price_Range = '$' or Price_Range = '$$ - $$$' or Price_Range='$$$$')
                     and t.Rating >=%s
                     and t.Rating <=%s
                     and not isnull(t.Number_of_Reviews)
                     order by Rating desc, ranking asc
                     limit 10
                     """
-            cursor.execute(query, (citta, prezzo, min, max))
+            cursor.execute(query, (citta, min, max))
             pass
 
         elif (cucina is None or cucina=="Qualsiasi") and not (prezzo is None or prezzo=="Qualsiasi"):
@@ -330,7 +337,7 @@ class DAO:
             query = """select *
                     from ta_restaurants_curated t
                     where t.City =%s
-                    and t.Price_Range != %s
+                    and (Price_Range = '$' or Price_Range = '$$ - $$$' or Price_Range='$$$$')
                     and t.Rating >=%s
                     and t.Rating <=%s
                     and t.Cuisine_Style like %s
@@ -338,7 +345,7 @@ class DAO:
                     order by Rating desc, ranking asc
                     limit 10
                     """
-            cursor.execute(query, (citta, prezzo,min,max,f"%{cucina}%"))
+            cursor.execute(query, (citta,min,max,f"%{cucina}%"))
             pass
 
         else:
