@@ -144,13 +144,13 @@ class Model:
 
 
                     #prendo recensioni
-                    s=str(r.Reviews)
-                    lRec=s.replace("[","").replace("]","").split("', '")
-                    diz_Rec={}
-                    diz_Rec[lRec[2].replace("'","").strip()]=lRec[0].replace("'", "").strip()
-                    diz_Rec[lRec[3].replace("'","").strip()]=lRec[1].replace("'", "").strip()
-
-                    r.dizRec=diz_Rec
+                    # s=str(r.Reviews)
+                    # lRec=s.replace("[","").replace("]","").split("', '")
+                    # diz_Rec={}
+                    # diz_Rec[lRec[2].replace("'","").strip()]=lRec[0].replace("'", "").strip()
+                    # diz_Rec[lRec[3].replace("'","").strip()]=lRec[1].replace("'", "").strip()
+                    #
+                    # r.dizRec=diz_Rec
 
 
                     #aggiungo
@@ -219,7 +219,7 @@ class Model:
                 a=nodi[i]
                 b=nodi[j]
 
-                c=len(a.setCucine.intersection(b.setCucine))
+                # c=len(a.setCucine.intersection(b.setCucine))
 
                 d=len(a.setCucine-b.setCucine)
                 e=len(b.setCucine-a.setCucine)
@@ -257,7 +257,6 @@ class Model:
                 parziale.append(a)
                 self.ricorsione(parziale,a,giorni)
                 parziale.pop()
-
         pass
 
     def getAmmissibili(self, parziale, ultimo,giorni):

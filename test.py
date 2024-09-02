@@ -1,4 +1,5 @@
 import random
+import time
 
 from database.DAO import DAO
 from model import model
@@ -63,11 +64,41 @@ def testClassi():
         print(f"\n{c}:")
         print(res)
 
-rist=DAO.getAllRistorantiDAO("$","Rome")
-for r in rist:
-    s = str(r.Reviews)
-    lRec = s.replace("[", "").replace("]", "").split("', '")
-    dizRec = {}
-    dizRec[lRec[2].replace("'", "").strip()] = lRec[0].replace("'", "").strip()
-    dizRec[lRec[3].replace("'", "").strip()] = lRec[1].replace("'", "").strip()
-    print(dizRec)
+# rist=DAO.getAllRistorantiDAO("$","Rome")
+# for r in rist:
+#     s = str(r.Reviews)
+#     lRec = s.replace("[", "").replace("]", "").split("', '")
+#     dizRec = {}
+#     dizRec[lRec[2].replace("'", "").strip()] = lRec[0].replace("'", "").strip()
+#     dizRec[lRec[3].replace("'", "").strip()] = lRec[1].replace("'", "").strip()
+#     print(dizRec)
+
+
+def testMigliori(i):
+    file=open("tempi.txt","w")
+    file2=open("tempiPython.txt","w")
+    citta=DAO.getAllCittaDAO()
+    prezzi=DAO.getAllPrezziDAO()
+
+    for c in citta:
+        for p in prezzi:
+
+            t1=time.time()
+            d=mod.getTopDieci(c,p,1,5,"Qualsiasi")
+            t2=time.time()
+
+            t3=time.time()
+            rist= DAO.getAllRistorantiDAOTest(p,c)
+            ristOrd=sorted(rist,key=lambda x:(-x.Rating,x.Ranking))
+            if len(ristOrd)<10:
+                pass
+            else:
+                ristOrd=ristOrd[:10]
+            t4=time.time()
+
+            file.write(f"{i} {t2-t1}\n")
+            file2.write(f"{i} {t4-t3}\n")
+            print(i)
+            i+=1
+testMigliori(1)
+print("stop")

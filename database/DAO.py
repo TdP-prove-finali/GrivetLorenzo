@@ -8,7 +8,7 @@ class DAO:
         pass
 
     @staticmethod
-    def getAllRistorantiDAOProva(prezzo, citta):
+    def getAllRistorantiDAOTest(prezzo, citta):
         cnx = DB_connect.DBConnect.get_connection()
         cursor = cnx.cursor(dictionary=True)
 
@@ -23,15 +23,7 @@ class DAO:
                         and City = %s
                         and not isnull(trc.Number_of_Reviews)
                         and not (Cuisine_Style like "%Vegan Options%" or Cuisine_Style like "%Vegetarian Friendly%" or Cuisine_Style like "%Gluten Free Options%")
-                        ) t1,
-                        (
-                        select tr.City, avg(tr.Rating*tr.Number_of_Reviews) as media
-                        from ta_restaurants_curated tr
-                        where not isnull(tr.Number_of_Reviews)
-                        group by tr.City 
-                        ) t2
-                        where t1.City = t2.City
-                        and t1.Rating*t1.Number_of_Reviews > t2.media"""
+                        ) t1"""
         else:
             query = """select t1.*
                         from (
