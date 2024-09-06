@@ -28,7 +28,7 @@ def testGrafoRic():
     allprezzi=mod.getAllPrezzi()
     mod.listaUtente=[]
 
-    file=open("tempiRicorsione.txt","a")
+    file=open("tempi/tempiRicorsione.txt", "a")
     file.write("\n\nNUOVO TEST********************************\n")
 
     for c in allcitta:
@@ -85,8 +85,8 @@ def testClassi():
 def testMigliori(i):
     #tempo per trovare i 10 migliori sql-python
 
-    file=open("tempi.txt","w")
-    file2=open("tempiPython.txt","w")
+    file=open("tempi/tempi.txt", "w")
+    file2=open("tempi/tempiPython.txt", "w")
     citta=DAO.getAllCittaDAO()
     prezzi=DAO.getAllPrezziDAO()
 
@@ -111,5 +111,92 @@ def testMigliori(i):
             print(i)
             i+=1
 
-for i in range(0,3):
-    testGrafoRic()
+#for i in range(0,3):
+#     testGrafoRic()
+
+def creaDizionari():
+    #divido i tempiricorsione in dizionari per ogni fascai di prezzo
+    file=open("tempi/tempiRicorsione.txt", "r")
+    lis = file.readlines()
+    diz={}
+    citta=None
+    i=-1
+    n=1
+
+    for a in lis:
+        a=a.strip("\n").strip()
+        if a=="" or "*" in a:
+            pass
+        else:
+            if "a" in a or "e" in a or "i" in a or "o" in a or "u" in a:
+                i=1
+                a=a.replace(":","")
+                citta=a
+            else:
+                # print(n)
+                # n+=1
+
+                b=a.split(" - ")
+                a=b[0]
+
+                if (citta,i) in diz.keys():
+                    tempi = diz[(citta,i)]
+                    tempi.append(a)
+                    diz[citta,i]=tempi
+                    i+=1
+                else:
+                    diz[(citta,i)]=[a]
+                    i+=1
+
+    file.close()
+
+    dizPrimo={}
+    dizSecondo={}
+    dizTerzo={}
+
+    for k in diz.keys():
+        if k[1]==1:
+            dizPrimo[k[0]]=diz[k]
+        elif k[1]==2:
+            dizSecondo[k[0]]=diz[k]
+        elif k[1]==3:
+            dizTerzo[k[0]]=diz[k]
+        else:
+            print("no")
+    return dizPrimo,dizSecondo,dizTerzo
+
+
+#testMain
+dP,dS,dT= creaDizionari()
+
+dizionari=[dP,dS,dT]
+
+for d in dizionari:
+
+    for a in d.keys():
+        lis=d[a]
+
+        somma=0
+        for i in lis:
+            somma+= float(i)
+
+        avg=somma/len(lis)
+        print(lis,avg)
+        d[a]=avg
+
+
+nomiFile=["tempiPrimo.txt","tempiSecondo.txt","tempiTerzo.txt"]
+
+for n in nomiFile:
+    file=open(n,"w")
+
+    if n == "tempiPrimo.txt":
+        dizionario=dP
+    elif n=="tempiSecondo.txt":
+        dizionario=dS
+    else:
+        dizionario=dT
+
+    for a in dP.keys():
+        file.write(f"{a[:3]} {dizionario[a]}\n")
+    file.close()
