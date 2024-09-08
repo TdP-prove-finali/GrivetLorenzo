@@ -8,4 +8,4 @@
 
 **4.** Eseguire il file "main"" del progetto per avviare il programma
 
-Per un video di presentazione visitare: LINK VIDEO
+Per un video di presentazione visitare: https://youtu.be/XbWh30WLr4Y

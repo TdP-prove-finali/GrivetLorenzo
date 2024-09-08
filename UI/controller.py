@@ -393,12 +393,14 @@ class Controller:
             self.view.lstRistorante.clean()
             self.view.lstRistorante.controls.append(ft.Text("Dettagli:", weight="bold", color="blue"))
 
-
             self.view.lstRistorante.controls.append(ft.Row(controls=[ft.Text(f"Nome",weight="bold"),ft.Text(self.selectedRistorante.Name,width=500)],vertical_alignment=ft.CrossAxisAlignment.START))
             self.view.lstRistorante.controls.append(ft.Row(controls=[ft.Text(f"Tipologie di cucina:",weight="bold"),ft.Text(self.selectedRistorante.Cuisine_Style.removeprefix("[").removesuffix("]").replace("'", ""),width=500)],vertical_alignment=ft.CrossAxisAlignment.START))
             self.view.lstRistorante.controls.append(ft.Row(controls=[ft.Text(f"Rating:",weight="bold"),ft.Text(self.selectedRistorante.Rating,width=500)],vertical_alignment=ft.CrossAxisAlignment.START))
             self.view.lstRistorante.controls.append(ft.Row(controls=[ft.Text(f"Range di prezzo:",weight="bold"),ft.Text(self.selectedRistorante.Price_Range,width=500)],vertical_alignment=ft.CrossAxisAlignment.START))
 
+            recensioni=self.model.getRecensioni(self.selectedRistorante)
+            if recensioni[0]:
+                self.view.lstRistorante.controls.append(ft.Row(controls=[ft.Text(f"Recensioni:",weight="bold"),ft.Text(recensioni[1])],width=500,vertical_alignment=ft.CrossAxisAlignment.START))
 
             if self.selectedRistorante.Number_of_Reviews==None or self.selectedRistorante.Number_of_Reviews=="":
                 n=0

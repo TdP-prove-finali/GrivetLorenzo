@@ -86,6 +86,61 @@ class Model:
         return
 
 
+    def getRecensioni(self,r):
+        lRec=list()
+        diz_Rec = {}
+        a=False
+        b=False
+        seps=["', '","\", \"","', \"","\", '"]
+        # prendo recensioni
+        s=str(r.Reviews)
+
+        l= s[2:-2].split("], [")
+        recS=l[0]
+        datS=l[1]
+
+        recL=[]
+        datL=[]
+        i=0
+        if r.riga==109:
+            pass
+        while ((not a) or (not b)) and i<4:
+            sep=seps[i]
+            #recensioni
+            if len(recL)<2:
+                recL= recS.split(sep)
+                if len(recL)==2:
+                    a=True
+
+            #date
+            if len(datL)<2:
+                datL=datS.split(sep)
+                if len(datL)==2:
+                    b=True
+
+            i+=1
+            pass
+
+        lRec=recL+datL
+        if r.Name =="Restaurante Brasil":
+            pass
+
+        if len(lRec)<4:
+            return False,"Nessuna recensione disponibile"
+        else:
+            diz_Rec[(lRec[2].replace("'","").replace("\"","").strip(),1)]=lRec[0].replace("'", "").replace("\"","").strip()
+            diz_Rec[(lRec[3].replace("'","").replace("\"","").strip(),2)]=lRec[1].replace("'", "").replace("\"","").strip()
+
+            r.dizRec=diz_Rec
+
+            k=list(diz_Rec.keys())
+            s1=f"{k[0][0]}: {diz_Rec[k[0]]}"
+            s2=f"{k[1][0]}: {diz_Rec[k[1]]}"
+            sTot=s1+"\n"+s2
+            return True,sTot
+
+
+
     #********************
 
     def checkCucina(self,nome,valore):
@@ -141,17 +196,6 @@ class Model:
                         # non voglio considerare le restrizioni come tipo di cucina (i ristoranti che ho sono già filtrati dalla query)
                         if d not in restrizioni:
                             r.setCucine.add(d) #il set sono tutte le cucine che NON sono restrizioni
-
-
-                    #prendo recensioni
-                    # s=str(r.Reviews)
-                    # lRec=s.replace("[","").replace("]","").split("', '")
-                    # diz_Rec={}
-                    # diz_Rec[lRec[2].replace("'","").strip()]=lRec[0].replace("'", "").strip()
-                    # diz_Rec[lRec[3].replace("'","").strip()]=lRec[1].replace("'", "").strip()
-                    #
-                    # r.dizRec=diz_Rec
-
 
                     #aggiungo
                     ristorantiOK.append(r)

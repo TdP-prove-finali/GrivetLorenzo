@@ -9,6 +9,8 @@ class DAO:
 
     @staticmethod
     def getAllRistorantiDAOTest(prezzo, citta):
+        #non prende cucine particolari
+
         cnx = DB_connect.DBConnect.get_connection()
         cursor = cnx.cursor(dictionary=True)
 
@@ -422,6 +424,28 @@ and t.Number_of_Reviews >=500
         for a in cursor:
             res.append(a)
 
+        cursor.close()
+        cnx.close()
+        return res
+
+    @staticmethod
+    def testRecensioni(citta,prezzo):
+        cnx = DB_connect.DBConnect.get_connection()
+        cursor = cnx.cursor(dictionary=True)
+
+        res = []
+
+        query = """select *
+                from ta_restaurants_curated t
+                where City =%s
+                and Price_Range = %s
+                and not isnull(t.Number_of_Reviews)
+                """
+
+        cursor.execute(query, (citta,prezzo))
+
+        for a in cursor:
+            res.append(Ristorante(**a))
         cursor.close()
         cnx.close()
         return res

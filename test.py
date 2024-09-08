@@ -165,38 +165,56 @@ def creaDizionari():
             print("no")
     return dizPrimo,dizSecondo,dizTerzo
 
+def testMain():
+    #testMain
+    dP,dS,dT= creaDizionari()
 
-#testMain
-dP,dS,dT= creaDizionari()
+    dizionari=[dP,dS,dT]
 
-dizionari=[dP,dS,dT]
+    for d in dizionari:
 
-for d in dizionari:
+        for a in d.keys():
+            lis=d[a]
 
-    for a in d.keys():
-        lis=d[a]
+            somma=0
+            for i in lis:
+                somma+= float(i)
 
-        somma=0
-        for i in lis:
-            somma+= float(i)
-
-        avg=somma/len(lis)
-        print(lis,avg)
-        d[a]=avg
+            avg=somma/len(lis)
+            print(lis,avg)
+            d[a]=avg
 
 
-nomiFile=["tempiPrimo.txt","tempiSecondo.txt","tempiTerzo.txt"]
+    nomiFile=["tempiPrimo.txt","tempiSecondo.txt","tempiTerzo.txt"]
 
-for n in nomiFile:
-    file=open(n,"w")
+    for n in nomiFile:
+        file=open(n,"w")
 
-    if n == "tempiPrimo.txt":
-        dizionario=dP
-    elif n=="tempiSecondo.txt":
-        dizionario=dS
-    else:
-        dizionario=dT
+        if n == "tempiPrimo.txt":
+            dizionario=dP
+        elif n=="tempiSecondo.txt":
+            dizionario=dS
+        else:
+            dizionario=dT
 
-    for a in dP.keys():
-        file.write(f"{a[:3]} {dizionario[a]}\n")
-    file.close()
+        for a in dP.keys():
+            file.write(f"{a[:3]} {dizionario[a]}\n")
+        file.close()
+
+def testRecensioni(n,nulle):
+    citta=DAO.getAllCittaDAO()
+    prezzi=DAO.getAllPrezziDAO()
+    for c in citta:
+        for p in prezzi:
+
+            allR= DAO.testRecensioni(c,p)
+            for r in allR:
+                n += 1
+                b,r2=mod.getRecensioni(r)
+                if b:
+                    print(r2.dizRec)
+                else:
+                    print("********************************************************************************************************\n***************************************************************************\n***********************************************************************\n**********************************************************************\n**************************************************************************\n*********************************************************\n***************************")
+                    nulle+=1
+
+    return n,nulle
